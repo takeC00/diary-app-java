@@ -1,0 +1,52 @@
+/*******************************
+* 編集画面
+********************************/
+
+/* 更新ボタン */
+.update-button {
+	display: flex;
+	justify-content: right;
+}
+
+.update-button button{
+	display: block;
+	padding: 10px 20px;
+	background-color: blanchedalmond;
+	border-radius: 10px;
+	border: 5px solid rgba(83, 83, 83, 0.356);
+	text-decoration: none;
+	color: black;
+}
+.update-button button:hover{
+	background-color: rgb(147 197 253);
+	color: white;
+}
+
+.mini-title {
+	font-size:20px;
+	margin: 0;
+	margin-top: 20px;
+}
+
+.icon-list {
+	display: grid;
+	grid-template-columns: repeat(3, 80px); /* ←固定幅 */
+	gap: 8px; /* ←間隔も調整 */
+	justify-content: start; /* ←左寄せ */
+}
+
+.icon-list img {
+  width: 60px;
+  height: 60px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.icon-list input {
+  display: none;
+}
+
+.icon-list input:checked + img {
+  border-color: blue;
+}

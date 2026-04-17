@@ -1,0 +1,36 @@
+.logo {
+	width: 128px;
+	height: 128px;
+	object-fit: cover;
+	display: block;
+	margin:0 auto;
+}
+
+.flex {
+	display: flex;
+	justify-content: space-between;
+	gap:30px;
+	align-items: center;
+}
+
+header {
+	padding: 20px 250px;
+	background-color: rgb(17 24 39);
+}
+
+.right {
+	text-align:right;
+}
+
+header a {
+	color: white;
+	text-decoration: none;
+}
+
+nav a:hover {
+	color: red;
+}
+
+li {
+	list-style: none;
+}

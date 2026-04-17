@@ -1,0 +1,42 @@
+.logo-mid {
+	width: 170px;
+	height: 170px;
+	object-fit: cover;
+	display: block;
+	margin:0 auto;
+}
+
+.flex {
+	display: flex;
+	justify-content: space-between;
+	gap:30px;
+	align-items: center;
+}
+
+footer {
+	padding: 20px 250px;
+	background-color: rgb(17 24 39);
+}
+
+.right {
+	text-align:right;
+}
+
+footer a {
+	color: white;
+	text-decoration: none;
+}
+
+nav a:hover {
+	color: red;
+}
+
+li {
+	list-style: none;
+}
+
+.copy-light {
+	display: block;
+	color:white;
+  text-align: center;
+}
