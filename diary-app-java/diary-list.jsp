@@ -2,59 +2,8 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <html lang="ja">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>写真日記一覧</title>
-		<link rel="stylesheet" href="/css/common.css">
-		<link rel="stylesheet" href="/css/header.css">
-		<link rel="stylesheet" href="/css/footer.css">
-		<link rel="stylesheet" href="/css/diaries.css">
-		<link rel="stylesheet" href="/css/detail.css">
-		<link rel="stylesheet" href="/css/register.css">
-		<link rel="stylesheet" href="/css/edit.css">
-		<link rel="stylesheet" href="/css/userPage.css">
-	</head>
-	<header class="">
-		<div class="flex">
-			<!-- ロゴ -->
-			<div class="flex">
-				<a href="/" class="flex">
-					<img src="/images/defaults/default.png" class="logo">
-					<span class="">Photo Diary</span>
-				</a>
-			</div>
-			<!-- ナビ -->
-			<nav class="right">
-				<ul class="flex right">
-					<li class="">
-						<a href="/diary/create">新規作成</a>
-					</li>
-					<li class="">
-						<a href="/myDiaries">自分日記一覧</a>
-					</li>
-					<li class="">
-						<a href="/myPage/1">
-							マイページ
-						</a>
-					</li>
-					<li class="">
-						<a href="/" class="">
-							公開日記
-						</a>
-					</li>
-					<li class="">
-						<form method="POST" action="/logout" class="">
-							<button type="submit" class="">
-								ログアウト
-							</button>
-						</form>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</header>
-
+	<%@ include file="includes/head.jsp"%>
+	<%@ include file="includes/headder.jsp"%>
 	<body>
 		<main>
 			<section>
@@ -89,47 +38,5 @@
 				</section>
 			</main>
 		</body>
-
-		<footer>
-			<div class="flex">
-				<!-- ロゴ -->
-				<div class="">
-					<a href="/" class="flex">
-						<img src="/images/defaults/default.png" class="logo-mid">
-					</a>
-				</div>
-				<!-- ナビ -->
-				<nav class="">
-					<ul class="flex">
-						<li class="">
-							<a href="/diary/create">新規作成</a>
-						</li>
-						<li class="">
-							<a href="/myDiaries">自分日記一覧</a>
-						</li>
-						<li class="">
-							<a href="/myPage/1">
-								マイページ
-							</a>
-						</li>
-						<li class="">
-							<a href="/" class="">
-								公開日記
-							</a>
-						</li>
-						<li class="">
-							<form method="POST" action="/logout" class="">
-								<button type="submit" class="">
-									ログアウト
-								</button>
-							</form>
-						</li>
-					</ul>
-				</nav>
-			</div>
-			<div class="copy-light">
-				<small>&copy; 2026 PhotoDiaryApp-PHP.</small>
-			</div>
-		</footer>
-
+		<%@ include file="includes/footer.jsp"%>
 	</html>
