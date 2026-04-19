@@ -1,5 +1,4 @@
 ./ROOT
 ./manager
 ./host-manager
-./example
-
+./examples
