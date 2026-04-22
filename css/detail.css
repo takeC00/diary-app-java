@@ -96,6 +96,11 @@ button.create:hover{
 	color: white;
 }
 
+.btn.delete:hover {
+	background-color: rgb(252 165 165);
+	color:white;
+}
+
 .public-setting {
 	display: flex;
 	align-items: center;

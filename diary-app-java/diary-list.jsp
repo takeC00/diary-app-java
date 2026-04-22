@@ -67,6 +67,11 @@ try {
     ps.setInt(1, perPage);
     ps.setInt(2, offset);
     rs = ps.executeQuery();
+
+		//ログインユーザーのid
+		int userId = 1;
+		session.setAttribute("user_id", userId);
+
 %>
 
 <!DOCTYPE html>
@@ -89,7 +94,7 @@ try {
                     }
                 %>
                 <article class="diary-card">
-                    <a href="/show/<%= rs.getInt("id") %>?from=public&page=<%= currentPage %>">
+                    <a href="/diary-app-java/show.jsp?diary_id=<%= rs.getInt("id") %>&from=public&page=<%= currentPage %>">
                         <img src="<%= h(image) %>" alt="日記画像" class="diary-image">
                         <h2 class="diary-title"><%= h(rs.getString("title")) %></h2>
                         <div class="diary-date"><%= h(rs.getString("diary_date")) %></div>
