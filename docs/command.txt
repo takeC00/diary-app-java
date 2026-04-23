@@ -1,0 +1,5 @@
+トムキャット再起動
+cd ~/tomcat8/bin
+./shutdown.sh
+rm -rf ~/tomcat8/work/Catalina
+./startup.sh
