@@ -72,6 +72,7 @@ try {
 		int userId = 1;
 		session.setAttribute("user_id", userId);
 
+		String success = (String) session.getAttribute("success");
 %>
 
 <!DOCTYPE html>
@@ -82,6 +83,13 @@ try {
 
 <main>
     <section>
+				<% if(success != null) { %>
+				<p><%= success %></p>
+				<%
+					}
+					session.removeAttribute("success");
+				%>
+
         <h1>公開日記一覧</h1>
 
         <div>
