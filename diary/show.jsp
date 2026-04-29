@@ -16,6 +16,14 @@ public String h(String str) {
 Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
+// 表示用変数
+int id = 0;
+String image = "";
+String title = "";
+String diaryDate = "";
+String body = "";
+String userName = "";
+int ownerId = 0;
 
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -24,7 +32,7 @@ try {
     String user = "root";
     String password = "root";
 
-    int diary_id = Integer.parseInt(request.getParameter("diary_id"));
+    Integer diary_id = Integer.parseInt(request.getParameter("diary_id"));
     conn = DriverManager.getConnection(url, user, password);
 
     String sql = "SELECT d.id, d.user_id, d.image, d.title, d.diary_date, d.body, u.name AS user_name "
@@ -36,14 +44,29 @@ try {
     ps.setInt(1, diary_id);
     rs = ps.executeQuery();
 		if (rs.next()) {
-			String image = rs.getString("image");
+			image = rs.getString("image");
 			if (image == null || image.isEmpty()) {
 					image = "/images/defaults/default.png";
+			}
+			id = rs.getInt("id");
+			title = rs.getString("title");
+      diaryDate = rs.getString("diary_date");
+      body = rs.getString("body");
+      userName = rs.getString("user_name");
+      ownerId = rs.getInt("user_id");
 		}
 		String pageParam = request.getParameter("page");
-		int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
+		Integer currentPage = (pageParam != null && !pageParam.isEmpty())
+						? Integer.parseInt(pageParam)
+						: 1;
 		Integer userId = (Integer) session.getAttribute("user_id");
-		int ownerId = rs.getInt("user_id");
+
+		if (id == 0) {
+				session.setAttribute("error", "存在しない日記IDが指定されました");
+				response.sendRedirect("/diary-app-java/diary/index.jsp");
+				return;
+		}
+		String success = (String) session.getAttribute("success");
 %>
 <!DOCTYPE html>
 <html lang="ja">
@@ -53,12 +76,18 @@ try {
 
 <main>
     <section>
+				<% if(success != null) { %>
+				<p class="green-message"><%= success %></p>
+				<%
+					}
+					session.removeAttribute("success");
+				%>
         <div class="button-section">
 						<% if (ownerId!=userId) { %>
 							<a href="/myPage/?user_id=<%= userId %>" class="btn my-page">この人の日記一覧を見る</a>
 							<a href="/diary-app-java/diary/index.jsp?page=<%= currentPage %>" class="btn">戻る</a>
 						<% } else { %>
-							<a href="/edit/?diary_id=<%= diary_id %>" class="btn">編集</a>
+							<a href="/diary-app-java/diary/edit.jsp?diary_id=<%= diary_id %>" class="btn">編集</a>
 							<form action="/diary-app-java/diary/delete.jsp" method="post" onsubmit="return confirm('削除しますか？');">
 									<input type="hidden" name="id" value="<%= rs.getInt("id") %>">
 									<button class="delete" type="submit">削除</button>
@@ -84,13 +113,6 @@ try {
                 <p class="detail-body"><%= h(rs.getString("body")) %></p>
             </div>
         </div>
-        <%
-        } else {
-        %>
-        <p>対象の日記が見つかりません。</p>
-        <%
-        }
-        %>
     </section>
 </main>
 

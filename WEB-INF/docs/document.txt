@@ -1,0 +1,10 @@
+Servletのコンパイル
+
+1。
+cd /Users/take/tomcat8/webapps/diary-app-java/WEB-INF/classes
+javac -cp ".:/Users/take/tomcat8/lib/servlet-api.jar" DiaryUpdateServlet.java
+
+2。
+cd /Users/take/tomcat8/bin
+./shutdown.sh
+./startup.sh

@@ -69,10 +69,11 @@ try {
     rs = ps.executeQuery();
 
 		//ログインユーザーのid
-		int userId = 1;
+		int userId = 2;
 		session.setAttribute("user_id", userId);
 
 		String success = (String) session.getAttribute("success");
+		String error	= (String) session.getAttribute("error");
 %>
 
 <!DOCTYPE html>
@@ -84,10 +85,16 @@ try {
 <main>
     <section>
 				<% if(success != null) { %>
-				<p><%= success %></p>
+				<p class="green-message"><%= success %></p>
 				<%
 					}
 					session.removeAttribute("success");
+				%>
+				<% if(error != null) { %>
+				<p class="error-message"><%= error %></p>
+				<%
+					}
+					session.removeAttribute("error");
 				%>
 
         <h1>公開日記一覧</h1>
