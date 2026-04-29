@@ -1,5 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+
+<%
+	request.setCharacterEncoding("UTF-8");
+	String error	= (String) session.getAttribute("error");
+%>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -8,9 +15,23 @@
 <%@ include file="/includes/headder.jsp" %>
 	<main>
 		<section class="container">
+			<%
+			List<String> errors = (List<String>) session.getAttribute("errors");
+
+			if (errors != null) {
+			%>
+			<ul>
+			<% for (String e : errors) { %>
+					<li style="color:red;"><%= e %></li>
+			<% } %>
+			</ul>
+			<%
+					session.removeAttribute("errors");
+			}
+			%>
 			<h1 class="page-title">新規作成</h1>
 
-			<form action="/register" method="POST">
+			<form action="/diary-app-java/auth/create.jsp" method="POST">
 
 				<div class="form">
 					<label for="name">名前</label>

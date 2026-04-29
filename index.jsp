@@ -1,7 +1,9 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
-
+<%
+	String success = (String) session.getAttribute("success");
+%>
 <!DOCTYPE html>
 <html lang="ja">
 <%@ include file="/includes/head.jsp" %>
@@ -9,9 +11,15 @@
 <%@ include file="/includes/headder.jsp" %>
 	<main>
 		<section class="container">
+				<% if(success != null) { %>
+				<p class="green-message"><%= success %></p>
+				<%
+					}
+					session.removeAttribute("success");
+				%>
 			<h1 class="page-title">ログイン</h1>
 
-			<form action="/login" method="POST">
+			<form action="/diary-app-java/auth/login.jsp" method="POST">
 
 				<div class="input-area">
 					<div class="form">
