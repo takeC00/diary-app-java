@@ -2,7 +2,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-
+<%@ page import="org.mindrot.jbcrypt.BCrypt" %>
 
 <%
 Connection conn = null;
@@ -10,6 +10,8 @@ PreparedStatement ps = null;
 PreparedStatement countPs = null;
 ResultSet rs = null;
 ResultSet countRs = null;
+
+request.setCharacterEncoding("UTF-8");
 
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -52,16 +54,16 @@ try {
 				return;
 		}
 
+		String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
+
 		String sql = "INSERT INTO users (`name`,`email`, `icon`, `password`,`created_at`,`updated_at`)"
 						+ "VALUES (?, ?, ?, ?, now(), now())";
-
-
 
     ps = conn.prepareStatement(sql);
     ps.setString(1, name);
     ps.setString(2, email);
 		ps.setString(3, "/images/defaults/icon_1.jpeg");
-		ps.setString(4, pass);
+		ps.setString(4, hashedPassword);
 		int result = ps.executeUpdate();
 		if (result == 1) {
 				session.setAttribute("success", "ユーザー作成しました");
