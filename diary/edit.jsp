@@ -160,6 +160,23 @@ try {
 	<%@ include file="/includes/footer.jsp" %>
 	</body>
 </html>
+<script>
+document.getElementById('imageInput').addEventListener('change', function(e) {
+	const file = e.target.files[0];
+
+	if (!file) return;
+
+	const reader = new FileReader();
+
+	reader.onload = function(event) {
+		const img = document.getElementById('preview');
+		img.src = event.target.result;
+		img.style.display = 'block';
+	};
+
+	reader.readAsDataURL(file);
+});
+</script>
 <%
 } catch (Exception e) {
     out.println("<pre>");
