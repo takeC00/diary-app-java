@@ -3,6 +3,8 @@
 <%@ page import="java.sql.*" %>
 <%
 	String success = (String) session.getAttribute("success");
+	String error = (String) session.getAttribute("error");
+	session.removeAttribute("user_id");
 %>
 <!DOCTYPE html>
 <html lang="ja">
@@ -12,10 +14,17 @@
 	<main>
 		<section class="container">
 				<% if(success != null) { %>
-				<p class="green-message"><%= success %></p>
+					<p class="green-message"><%= success %></p>
 				<%
 					}
 					session.removeAttribute("success");
+				%>
+
+				<% if(error != null) { %>
+					<p class="error-message"><%= error %></p>
+				<%
+					}
+					session.removeAttribute("error");
 				%>
 			<h1 class="page-title">ログイン</h1>
 

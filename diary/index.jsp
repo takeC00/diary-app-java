@@ -68,10 +68,6 @@ try {
     ps.setInt(2, offset);
     rs = ps.executeQuery();
 
-		//ログインユーザーのid
-		int userId = 2;
-		session.setAttribute("user_id", userId);
-
 		String success = (String) session.getAttribute("success");
 		String error	= (String) session.getAttribute("error");
 %>
