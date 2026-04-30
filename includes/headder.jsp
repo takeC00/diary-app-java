@@ -28,7 +28,7 @@
 					</a>
 				</li>
 				<li class="">
-					<form method="POST" action="/logout" class="">
+					<form method="POST" action="/diary-app-java/auth/logout.jsp" class="">
 						<button type="submit" class="">
 							ログアウト
 						</button>
