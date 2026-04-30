@@ -20,6 +20,14 @@ ResultSet rs = null;
 ResultSet countRs = null;
 
 try {
+		Integer userId = (Integer) session.getAttribute("user_id");
+		if (userId == null){
+			//ログインしてない場合
+			session.setAttribute("error", "ログインしてください");
+			// ログイン画面へリダイレクト
+			response.sendRedirect("/diary-app-java/");
+			return;
+		}
     Class.forName("com.mysql.cj.jdbc.Driver");
 
     String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
@@ -69,7 +77,7 @@ try {
     rs = ps.executeQuery();
 
 		String success = (String) session.getAttribute("success");
-		String error	= (String) session.getAttribute("error");
+		String error	 = (String) session.getAttribute("error");
 %>
 
 <!DOCTYPE html>

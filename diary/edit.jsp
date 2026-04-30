@@ -37,6 +37,15 @@ try {
     String user = "root";
     String password = "root";
 
+		Integer userId = (Integer) session.getAttribute("user_id");
+		if (userId == null){
+			//ログインしてない場合
+			session.setAttribute("error", "ログインしてください");
+			// ログイン画面へリダイレクト
+			response.sendRedirect("/diary-app-java/");
+			return;
+		}
+		
     int diary_id = Integer.parseInt(request.getParameter("diary_id"));
     conn = DriverManager.getConnection(url, user, password);
 
@@ -64,7 +73,6 @@ try {
 
 		String pageParam = request.getParameter("page");
 		int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
-		Integer userId = (Integer) session.getAttribute("user_id");
 
 		if ("1".equals(checked)){
 			is_public = "checked";

@@ -25,6 +25,15 @@ String body = "";
 String userName = "";
 int ownerId = 0;
 
+Integer userId = (Integer) session.getAttribute("user_id");
+if (userId == null){
+	//ログインしてない場合
+	session.setAttribute("error", "ログインしてください");
+	// ログイン画面へリダイレクト
+	response.sendRedirect("/diary-app-java/");
+	return;
+}
+
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -59,7 +68,6 @@ try {
 		Integer currentPage = (pageParam != null && !pageParam.isEmpty())
 						? Integer.parseInt(pageParam)
 						: 1;
-		Integer userId = (Integer) session.getAttribute("user_id");
 
 		if (id == 0) {
 				session.setAttribute("error", "存在しない日記IDが指定されました");
