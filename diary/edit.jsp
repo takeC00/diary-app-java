@@ -45,7 +45,19 @@ try {
 			response.sendRedirect("/diary-app-java/");
 			return;
 		}
-		
+
+
+		String pageParam = request.getParameter("page");
+		String fromPage = request.getParameter("from");
+		String backUrl = "";
+
+		if ("myDiary".equals(fromPage)) {
+				backUrl = "/diary-app-java/" + fromPage + "/index.jsp?page=" + pageParam;
+		}else{
+			backUrl = "/diary-app-java/diary/index.jsp?page=" + pageParam;
+		}
+
+
     int diary_id = Integer.parseInt(request.getParameter("diary_id"));
     conn = DriverManager.getConnection(url, user, password);
 
@@ -71,7 +83,6 @@ try {
 			checked = rs.getString("is_public");
 		}
 
-		String pageParam = request.getParameter("page");
 		int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
 
 		if ("1".equals(checked)){
@@ -101,7 +112,7 @@ try {
 	<main>
 		<section>
 						<div class="button-section">
-				<a href="/diary-app-java/diary/show.jsp?diary_id=<%= id %>&from=public&page=<%= currentPage %>"><button class="back">戻る</button></a>
+				<a href="<%= backUrl %>"><button class="back">戻る</button></a>
 			</div>
 			<div class="detail-section">
 				<div class="diary-detail flex">

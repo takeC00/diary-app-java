@@ -34,6 +34,17 @@ if (userId == null){
 	return;
 }
 
+String pageParam = request.getParameter("page");
+String fromPage = request.getParameter("from");
+String backUrl = "";
+
+if ("myDiary".equals(fromPage)) {
+    backUrl = "/diary-app-java/" + fromPage + "/index.jsp?page=" + pageParam;
+}else{
+	backUrl = "/diary-app-java/diary/index.jsp?page=" + pageParam;
+}
+
+
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -64,7 +75,7 @@ try {
       userName = rs.getString("user_name");
       ownerId = rs.getInt("user_id");
 		}
-		String pageParam = request.getParameter("page");
+
 		Integer currentPage = (pageParam != null && !pageParam.isEmpty())
 						? Integer.parseInt(pageParam)
 						: 1;
@@ -93,14 +104,14 @@ try {
         <div class="button-section">
 						<% if (ownerId!=userId) { %>
 							<a href="/myPage/?user_id=<%= userId %>" class="btn my-page">この人の日記一覧を見る</a>
-							<a href="/diary-app-java/diary/index.jsp?page=<%= currentPage %>" class="btn">戻る</a>
+							<a href="<%= backUrl %>" class="btn">戻る</a>
 						<% } else { %>
-							<a href="/diary-app-java/diary/edit.jsp?diary_id=<%= diary_id %>" class="btn">編集</a>
+							<a href="/diary-app-java/diary/edit.jsp?from=<%= fromPage  %>&diary_id=<%= diary_id %>&page=<%= pageParam %>" class="btn">編集</a>
 							<form action="/diary-app-java/diary/delete.jsp" method="post" onsubmit="return confirm('削除しますか？');">
 									<input type="hidden" name="id" value="<%= rs.getInt("id") %>">
 									<button class="delete" type="submit">削除</button>
 							</form>
-							<a href="/diary-app-java/diary/index.jsp?page=<%= currentPage %>" class="btn">戻る</a>
+							<a href="<%= backUrl %>" class="btn">戻る</a>
 						<%	}	%>
         </div>
         <div class="detail-section">
