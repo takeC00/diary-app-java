@@ -2,80 +2,75 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="org.mindrot.jbcrypt.BCrypt" %>
 
 <%
-Connection conn = null;
-PreparedStatement ps = null;
-PreparedStatement countPs = null;
-ResultSet rs = null;
-ResultSet countRs = null;
-
-request.setCharacterEncoding("UTF-8");
-
-try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
-    conn = DriverManager.getConnection(url, user, password);
-
-		String name =   "";
-		String email =  "";
-		String pass =   "";
-		String rePass = "";
-
-		name = request.getParameter("name");
-		email = request.getParameter("email");
-		pass = request.getParameter("password");
-		rePass = request.getParameter("rePassword");
-
-		List<String> errors = new ArrayList<>();
-		if(name == ""){
-				errors.add("名前は必須です");
-		}
-
-		if(email == ""){
-				errors.add("メールアドレスは必須です");
-		}
-
-		if(!pass.equals(rePass)){
-				errors.add("パスワードとパスワード(確認)が一致しません");
-		}
-
-		if (pass == "" || !pass.matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")) {
-				errors.add("パスワードは半角英数字で8文字以上で入力してください");
-		}
-		if (!errors.isEmpty()) {
-				session.setAttribute("errors", errors);
-				response.sendRedirect("/diary-app-java/auth/register.jsp");
-				return;
-		}
-
-		String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
-
-		String sql = "INSERT INTO users (`name`,`email`, `icon`, `password`,`created_at`,`updated_at`)"
-						+ "VALUES (?, ?, ?, ?, now(), now())";
-
-    ps = conn.prepareStatement(sql);
-    ps.setString(1, name);
-    ps.setString(2, email);
-		ps.setString(3, "/images/defaults/icon_1.jpeg");
-		ps.setString(4, hashedPassword);
-		int result = ps.executeUpdate();
-		if (result == 1) {
-				session.setAttribute("success", "ユーザー作成しました");
-				response.sendRedirect("/diary-app-java/");
-				return;
-		} else {
-				out.println("登録に失敗しました");
-		}
-
-	} catch (Exception e) {
-    out.println("<pre>");
-    e.printStackTrace(new java.io.PrintWriter(out));
-    out.println("</pre>");
-	}
+	request.setCharacterEncoding("UTF-8");
+	String error	= (String) session.getAttribute("error");
 %>
+
+<!DOCTYPE html>
+<html lang="ja">
+<%@ include file="/includes/head.jsp" %>
+<body>
+<%@ include file="/includes/headder.jsp" %>
+	<main>
+		<section class="container">
+			<%
+			List<String> errors = (List<String>) session.getAttribute("errors");
+
+			if (errors != null) {
+			%>
+			<ul>
+			<% for (String e : errors) { %>
+					<li style="color:red;"><%= e %></li>
+			<% } %>
+			</ul>
+			<%
+					session.removeAttribute("errors");
+			}
+			%>
+			<h1 class="page-title">新規作成</h1>
+
+			<form action="/diary-app-java/auth/insert.jsp" method="POST">
+
+				<div class="form">
+					<label for="name">名前</label>
+					<input class="" type="name" placeholder="田中太郎"
+						name="name" id="name"
+						value="">
+				</div>
+
+				<div class="form">
+					<label for="email">メールアドレス</label>
+					<input class="" type="email"
+						placeholder="sample@hogehoge.com" name="email" id="email"
+						value="">
+				</div>
+
+				<div class="form">
+					<label for="password">パスワード</label>
+					<input class="" class="" type="password"
+						placeholder="半角英数字で8文字以上" name="password" id="password">
+				</div>
+
+				<div class="form">
+					<label for="rePassword">パスワード(確認)</label>
+					<input class="" type="rePassword"
+						placeholder="パスワードと同じ値を入力" name="rePassword" id="rePassword">
+				</div>
+
+				<div class="right">
+					<div class="register-button">
+						<button class="" type="submit">登録</button>
+					</div>
+					<div class="register-button-back">
+						<a class="back-button" href="/login">戻る</a>
+					</div>
+				</div>
+
+			</form>
+		</section>
+	</main>
+<%@ include file="/includes/footer.jsp" %>
+</body>
+</html>

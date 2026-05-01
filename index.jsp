@@ -4,7 +4,6 @@
 <%
 	String success = (String) session.getAttribute("success");
 	String error = (String) session.getAttribute("error");
-	session.removeAttribute("user_id");
 %>
 <!DOCTYPE html>
 <html lang="ja">
@@ -45,7 +44,7 @@
 				</div>
 				<div class="right">
 					<div class="register-link-button">
-						<a class="back-button" href="/diary-app-java/auth/register.jsp">アカウント作成がまだの方はこちらから</a>
+						<a class="back-button" href="/diary-app-java/auth/create.jsp">アカウント作成がまだの方はこちらから</a>
 					</div>
 					<div class="login-button">
 						<button class="" type="submit">ログイン</button>
