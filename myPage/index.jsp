@@ -116,15 +116,13 @@ try {
 				マイページ
 				<img src="<%= h(userIcon) %>"	class="icon" alt="">
 			</h1>
-			<form action="/myPage/edit/1" method="POST" enctype="multipart/form-data">
+			<form action="/diary-app-java/myPage/update.jsp" method="POST">
 				<div>
 									</div>
 				<div class="diary-detail flex">
 					<div class="detail">
 						<p class="mini-title">自己紹介：</p>
-						<textarea name="introduction" placeholder="まだ、自己紹介文が登録されていません。自己紹介文を登録してみましょう">
-							<%= h(introduction) %>
-						</textarea>
+						<textarea name="introduction" placeholder="まだ、自己紹介文が登録されていません。自己紹介文を登録してみましょう"><%= h(introduction) %></textarea>
 						<p class="mini-title">アイコン：</p>
 						<div class="icon-list">
 							<label>
