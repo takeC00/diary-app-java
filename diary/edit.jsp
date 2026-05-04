@@ -123,6 +123,7 @@ try {
 					</div>
 					<form action="/diary-app-java/diary/update" method="POST" enctype="multipart/form-data">
 						<input type="hidden" name="id" value="<%= id %>">
+						<input type="hidden" name="pageParam" value="<%= pageParam %>">
 						<div class="form-row">
 							<p class="mini-title">タイトル：</p>
 							<input type="text" name="title"
@@ -148,7 +149,6 @@ try {
 						<div class="form-row">
 							<p class="mini-title public">公開設定：</p>
 							<div class="radio-group">
-														<div class="radio-group">
 								<label>
 									<input type="radio" name="is_public" value="1" <%= is_public %> >
 									公開
@@ -158,7 +158,6 @@ try {
 									<input type="radio" name="is_public" value="0" <%= un_public %> >
 									非公開
 								</label>
-							</div>
 							</div>
 						</div>
 

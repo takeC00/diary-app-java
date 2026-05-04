@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
 
+
 <%!
 public String h(String str) {
     if (str == null) return "";
@@ -64,17 +65,41 @@ try {
         offset = (currentPage - 1) * perPage;
     }
 
-    String sql = "SELECT d.id, d.image, d.title, d.diary_date, u.name "
-               + "FROM diaries d "
-               + "JOIN users u ON u.id = d.user_id "
-               + "WHERE d.is_public = 1 "
-               + "ORDER BY d.diary_date DESC "
-               + "LIMIT ? OFFSET ?";
+	  // ユーザー情報
+		String userSql = "SELECT id, name, icon, introduction "
+              + "FROM users "
+              + "WHERE id = ?";
 
-    ps = conn.prepareStatement(sql);
-    ps.setInt(1, perPage);
-    ps.setInt(2, offset);
-    rs = ps.executeQuery();
+		PreparedStatement userPs = conn.prepareStatement(userSql);
+		userPs.setInt(1, userId);
+		ResultSet userRs = userPs.executeQuery();
+
+		String userName = "";
+		String userIcon = "/images/defaults/icon_1.jpeg";
+		String introduction = "";
+
+		if (userRs.next()) {
+				userName = userRs.getString("name");
+				if (userRs.getString("icon") != null && !userRs.getString("icon").isEmpty()) {
+						userIcon = userRs.getString("icon");
+				}
+				introduction = userRs.getString("introduction");
+		}
+
+		// 日記情報
+		String diarySql = "SELECT "
+							+ "d.id AS diary_id, "
+							+ "d.image AS image, "
+							+ "d.title AS title, "
+							+ "d.diary_date AS diary_date "
+							+ "FROM diaries d "
+							+ "JOIN users u ON u.id = d.user_id "
+							+ "WHERE d.user_id = ? "
+							+ "ORDER BY diary_date DESC ";
+
+    PreparedStatement diaryPs = conn.prepareStatement(diarySql);
+    diaryPs.setInt(1, userId);
+    ResultSet diaryRs = diaryPs.executeQuery();
 
 		String success = (String) session.getAttribute("success");
 		String error	 = (String) session.getAttribute("error");
@@ -85,87 +110,116 @@ try {
 <%@ include file="/includes/head.jsp" %>
 <body>
 <%@ include file="/includes/headder.jsp" %>
+	<main>
+		<section>
+			<h1>
+				マイページ
+				<img src="<%= h(userIcon) %>"	class="icon" alt="">
+			</h1>
+			<form action="/myPage/edit/1" method="POST" enctype="multipart/form-data">
+				<div>
+									</div>
+				<div class="diary-detail flex">
+					<div class="detail">
+						<p class="mini-title">自己紹介：</p>
+						<textarea name="introduction" placeholder="まだ、自己紹介文が登録されていません。自己紹介文を登録してみましょう">
+							<%= h(introduction) %>
+						</textarea>
+						<p class="mini-title">アイコン：</p>
+						<div class="icon-list">
+							<label>
+								<input type="radio" name="icon" value="/images/defaults/icon_1.jpeg">
+								<img src="/images/defaults/icon_1.jpeg">
+							</label>
 
-<main>
-    <section>
-				<% if(success != null) { %>
-				<p class="green-message"><%= success %></p>
-				<%
-					}
-					session.removeAttribute("success");
-				%>
-				<% if(error != null) { %>
-				<p class="error-message"><%= error %></p>
-				<%
-					}
-					session.removeAttribute("error");
-				%>
+							<label>
+								<input type="radio" name="icon" value="/images/defaults/icon_2.jpeg">
+								<img src="/images/defaults/icon_2.jpeg">
+							</label>
+							<label>
+								<input type="radio" name="icon" value="/images/defaults/icon_3.jpeg">
+								<img src="/images/defaults/icon_3.jpeg">
+							</label>
 
-        <h1>公開日記一覧</h1>
-
-        <div>
-            <div class="diary-list">
-                <%
-                while (rs.next()) {
-                    String image = rs.getString("image");
+							<label>
+								<input type="radio" name="icon" value="/images/defaults/icon_4.jpeg">
+								<img src="/images/defaults/icon_4.jpeg">
+							</label>
+							<label>
+								<input type="radio" name="icon" value="/images/defaults/icon_5.jpeg">
+								<img src="/images/defaults/icon_5.jpeg">
+							</label>
+							<label>
+								<input type="radio" name="icon" value="/images/defaults/icon_6.jpeg">
+								<img src="/images/defaults/icon_6.jpeg">
+							</label>
+						</div>
+					</div>
+					<div>
+						<p class="mini-title">日記一覧：</p>
+							<div class="user-diary-grid">
+								<%
+                  while (diaryRs.next()) {
+                    String image = diaryRs.getString("image");
                     if (image == null || image.isEmpty()) {
                         image = "/images/defaults/default.png";
                     }
                 %>
-                <article class="diary-card">
-                    <a href="/diary-app-java/diary/show.jsp?diary_id=<%= rs.getInt("id") %>&from=public&page=<%= currentPage %>">
-                        <img src="<%= h(image) %>" alt="日記画像" class="diary-image">
-                        <h2 class="diary-title"><%= h(rs.getString("title")) %></h2>
-                        <div class="diary-date"><%= h(rs.getString("diary_date")) %></div>
-                        <p class="diary-user"><%= h(rs.getString("name")) %></p>
-                    </a>
-                </article>
-                <%
-                }
-                %>
-            </div>
-        </div>
+								<a href="/diary-app-java/diary/show.jsp?diary_id=<%= diaryRs.getInt("diary_id") %>&from=myPage&page=1" class="grid-item">
+									<img src="<%= h(image) %>">
+								</a>
+								<%
+									}
+								%>
+							</div>
+					</div>
+				</div>
+				<div class="update-button-my-page">
+					<button class="" type="submit">更新</button>
+				</div>
+			</form>
 
-        <div class="pagination">
-            <%
-            if (currentPage <= 1) {
-            %>
-                <span class="page-button arrow gray"><</span>
-            <%
-            } else {
-            %>
-                <a href="?page=<%= currentPage - 1 %>" class="page-button arrow"><</a>
-            <%
-            }
+			<div class="user-diaries">
+							<!-- ページが2以上ならページネーション -->
+						<div class="pagination">
 
-            for (int i = 1; i <= totalPages; i++) {
-                if (i == currentPage) {
-            %>
-                <span class="page-button current"><%= i %></span>
-            <%
-                } else {
-            %>
-                <a href="?page=<%= i %>" class="page-button"><%= i %></a>
-            <%
-                }
-            }
+				<!-- 1ページ目は戻るボタン無効化 -->
 
-            if (currentPage >= totalPages) {
-            %>
-                <span class="page-button arrow gray">></span>
-            <%
-            } else {
-            %>
-                <a href="?page=<%= currentPage + 1 %>" class="page-button arrow">></a>
-            <%
-            }
-            %>
-        </div>
-    </section>
-</main>
+									<button class="page-button arrow gray"><</button>
 
+															<button class="page-button current">1</button>
+																				<a href="?page=2"><button class="page-button">2</button></a>
+
+				<!-- 最終ページ目は進むボタン無効化 -->
+
+									<a href="?page=2" class="page-button arrow">></a>
+
+			</div>
+						</div>
+		</section>
+	</main>
 <%@ include file="/includes/footer.jsp" %>
 </body>
+</html>
+
+<script>
+document.getElementById('imageInput').addEventListener('change', function(e) {
+	const file = e.target.files[0];
+
+	if (!file) return;
+
+	const reader = new FileReader();
+
+	reader.onload = function(event) {
+		const img = document.getElementById('preview');
+		img.src = event.target.result;
+		img.style.display = 'block';
+	};
+
+	reader.readAsDataURL(file);
+});
+</script>
+
 </html>
 
 <%

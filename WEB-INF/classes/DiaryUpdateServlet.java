@@ -31,6 +31,11 @@ public class DiaryUpdateServlet extends HttpServlet {
         String diaryDate = request.getParameter("diary_date");
         String body = request.getParameter("body");
         String isPublic = request.getParameter("is_public");
+				String pageParam = request.getParameter("pageParam");
+
+				if (pageParam == null || pageParam.isEmpty() || "null".equals(pageParam)) {
+					pageParam = "1";
+				}
 
         Integer loginUserId = (Integer) session.getAttribute("user_id");
 
@@ -132,7 +137,8 @@ public class DiaryUpdateServlet extends HttpServlet {
             }
 
             session.setAttribute("success", "更新しました");
-            response.sendRedirect("/diary-app-java/diary/show.jsp?diary_id=" + id);
+            response.sendRedirect("/diary-app-java/diary/show.jsp?diary_id=" + id + "&page=" + pageParam);
+						return;
 
         } catch (Exception e) {
             throw new ServletException(e);

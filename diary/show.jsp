@@ -103,7 +103,7 @@ try {
 				%>
         <div class="button-section">
 						<% if (ownerId!=userId) { %>
-							<a href="/myPage/?user_id=<%= userId %>" class="btn my-page">この人の日記一覧を見る</a>
+							<a href="/diary-app-java/myPage/?user_id=<%= ownerId %>" class="btn my-page">この人の日記一覧を見る</a>
 							<a href="<%= backUrl %>" class="btn">戻る</a>
 						<% } else { %>
 							<a href="/diary-app-java/diary/edit.jsp?from=<%= fromPage  %>&diary_id=<%= diary_id %>&page=<%= pageParam %>" class="btn">編集</a>

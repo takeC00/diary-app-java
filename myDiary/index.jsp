@@ -38,7 +38,7 @@ try {
 
     String pageParam = request.getParameter("page");
 		String fromPage = request.getParameter("from");
-		
+
     int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
     if (currentPage < 1) {
         currentPage = 1;
@@ -71,8 +71,7 @@ try {
     String sql = "SELECT d.id, d.image, d.title, d.diary_date, u.name, u.id  "
                + "FROM diaries d "
                + "JOIN users u ON u.id = d.user_id "
-               + "WHERE d.is_public = 1 "
-							 + "AND u.id = ? "
+               + "WHERE u.id = ? "
                + "ORDER BY d.diary_date DESC "
                + "LIMIT ? OFFSET ?";
 
