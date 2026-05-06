@@ -112,6 +112,18 @@ try {
 <%@ include file="/includes/headder.jsp" %>
 	<main>
 		<section>
+			<% if(success != null) { %>
+			<p class="green-message"><%= success %></p>
+			<%
+				}
+				session.removeAttribute("success");
+			%>
+			<% if(error != null) { %>
+			<p class="error-message"><%= error %></p>
+			<%
+				}
+				session.removeAttribute("error");
+			%>
 			<h1>
 				マイページ
 				<img src="<%= h(userIcon) %>"	class="icon" alt="">
