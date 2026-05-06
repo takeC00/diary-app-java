@@ -29,6 +29,18 @@ try {
 			response.sendRedirect("/diary-app-java/");
 			return;
 		}
+
+	  //自分のマイページか他人のマイページか判断
+		boolean otherUser = false;
+		if (request.getParameter("user_id") != null && !request.getParameter("user_id").isEmpty()){
+			Integer targetUserId = Integer.parseInt(request.getParameter("user_id"));
+			if (userId != targetUserId){
+				otherUser = true;
+				userId = targetUserId;
+			}
+		}
+
+
     Class.forName("com.mysql.cj.jdbc.Driver");
 
     String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
@@ -110,6 +122,7 @@ try {
 <%@ include file="/includes/head.jsp" %>
 <body>
 <%@ include file="/includes/headder.jsp" %>
+
 	<main>
 		<section>
 			<% if(success != null) { %>
@@ -125,7 +138,11 @@ try {
 				session.removeAttribute("error");
 			%>
 			<h1>
-				マイページ
+				<% if (!otherUser) { %>
+					マイページ
+				<% } else { %>
+					<%= userName %>の日記
+				<% } %>
 				<img src="<%= h(userIcon) %>"	class="icon" alt="">
 			</h1>
 			<form action="/diary-app-java/myPage/update.jsp" method="POST">
@@ -134,36 +151,40 @@ try {
 				<div class="diary-detail flex">
 					<div class="detail">
 						<p class="mini-title">自己紹介：</p>
-						<textarea name="introduction" placeholder="まだ、自己紹介文が登録されていません。自己紹介文を登録してみましょう"><%= h(introduction) %></textarea>
-						<p class="mini-title">アイコン：</p>
-						<div class="icon-list">
-							<label>
-								<input type="radio" name="icon" value="/images/defaults/icon_1.jpeg">
-								<img src="/images/defaults/icon_1.jpeg">
-							</label>
+						<% if (!otherUser) { %>
+							<textarea name="introduction" placeholder="まだ、自己紹介文が登録されていません。自己紹介文を登録してみましょう"><%= h(introduction) %></textarea>
+							<p class="mini-title">アイコン：</p>
+							<div class="icon-list">
+								<label>
+									<input type="radio" name="icon" value="/images/defaults/icon_1.jpeg">
+									<img src="/images/defaults/icon_1.jpeg">
+								</label>
 
-							<label>
-								<input type="radio" name="icon" value="/images/defaults/icon_2.jpeg">
-								<img src="/images/defaults/icon_2.jpeg">
-							</label>
-							<label>
-								<input type="radio" name="icon" value="/images/defaults/icon_3.jpeg">
-								<img src="/images/defaults/icon_3.jpeg">
-							</label>
+								<label>
+									<input type="radio" name="icon" value="/images/defaults/icon_2.jpeg">
+									<img src="/images/defaults/icon_2.jpeg">
+								</label>
+								<label>
+									<input type="radio" name="icon" value="/images/defaults/icon_3.jpeg">
+									<img src="/images/defaults/icon_3.jpeg">
+								</label>
 
-							<label>
-								<input type="radio" name="icon" value="/images/defaults/icon_4.jpeg">
-								<img src="/images/defaults/icon_4.jpeg">
-							</label>
-							<label>
-								<input type="radio" name="icon" value="/images/defaults/icon_5.jpeg">
-								<img src="/images/defaults/icon_5.jpeg">
-							</label>
-							<label>
-								<input type="radio" name="icon" value="/images/defaults/icon_6.jpeg">
-								<img src="/images/defaults/icon_6.jpeg">
-							</label>
-						</div>
+								<label>
+									<input type="radio" name="icon" value="/images/defaults/icon_4.jpeg">
+									<img src="/images/defaults/icon_4.jpeg">
+								</label>
+								<label>
+									<input type="radio" name="icon" value="/images/defaults/icon_5.jpeg">
+									<img src="/images/defaults/icon_5.jpeg">
+								</label>
+								<label>
+									<input type="radio" name="icon" value="/images/defaults/icon_6.jpeg">
+									<img src="/images/defaults/icon_6.jpeg">
+								</label>
+							</div>
+						<% } else { %>
+							<p>><%= h(introduction) %></p>
+						<% } %>
 					</div>
 					<div>
 						<p class="mini-title">日記一覧：</p>
@@ -184,9 +205,11 @@ try {
 							</div>
 					</div>
 				</div>
-				<div class="update-button-my-page">
-					<button class="" type="submit">更新</button>
-				</div>
+				<% if (!otherUser) { %>
+					<div class="update-button-my-page">
+						<button class="" type="submit">更新</button>
+					</div>
+				<% } %>
 			</form>
 
 			<div class="user-diaries">
