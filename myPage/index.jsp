@@ -58,8 +58,9 @@ try {
     int perPage = 12;
     int offset = (currentPage - 1) * perPage;
 
-    String countSql = "SELECT COUNT(*) FROM diaries d WHERE d.is_public = 1";
+    String countSql = "SELECT COUNT(*) FROM diaries d WHERE user_id = ?";
     countPs = conn.prepareStatement(countSql);
+		countPs.setInt(1, userId);
     countRs = countPs.executeQuery();
 
     int totalCount = 0;
@@ -107,10 +108,13 @@ try {
 							+ "FROM diaries d "
 							+ "JOIN users u ON u.id = d.user_id "
 							+ "WHERE d.user_id = ? "
-							+ "ORDER BY diary_date DESC ";
+							+ "ORDER BY diary_date DESC "
+							+ "LIMIT ? OFFSET ?";
 
     PreparedStatement diaryPs = conn.prepareStatement(diarySql);
     diaryPs.setInt(1, userId);
+		diaryPs.setInt(2, perPage);
+    diaryPs.setInt(3, offset);
     ResultSet diaryRs = diaryPs.executeQuery();
 
 		String success = (String) session.getAttribute("success");
@@ -211,24 +215,41 @@ try {
 					</div>
 				<% } %>
 			</form>
+			<div class="pagination">
+					<%
+					if (currentPage <= 1) {
+					%>
+							<span class="page-button arrow gray"><</span>
+					<%
+					} else {
+					%>
+							<a href="?page=<%= currentPage - 1 %>" class="page-button arrow"><</a>
+					<%
+					}
 
-			<div class="user-diaries">
-							<!-- ページが2以上ならページネーション -->
-						<div class="pagination">
+					for (int i = 1; i <= totalPages; i++) {
+							if (i == currentPage) {
+					%>
+							<span class="page-button current"><%= i %></span>
+					<%
+							} else {
+					%>
+							<a href="?page=<%= i %>" class="page-button"><%= i %></a>
+					<%
+							}
+					}
 
-				<!-- 1ページ目は戻るボタン無効化 -->
-
-									<button class="page-button arrow gray"><</button>
-
-															<button class="page-button current">1</button>
-																				<a href="?page=2"><button class="page-button">2</button></a>
-
-				<!-- 最終ページ目は進むボタン無効化 -->
-
-									<a href="?page=2" class="page-button arrow">></a>
-
+					if (currentPage >= totalPages) {
+					%>
+							<span class="page-button arrow gray">></span>
+					<%
+					} else {
+					%>
+							<a href="?page=<%= currentPage + 1 %>" class="page-button arrow">></a>
+					<%
+					}
+					%>
 			</div>
-						</div>
 		</section>
 	</main>
 <%@ include file="/includes/footer.jsp" %>
