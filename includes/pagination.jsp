@@ -1,38 +1,53 @@
-			<!-- ページが2以上ならページネーション -->
-			<?php if ($totalPages > 1): ?>
-			<div class="pagination">
+<%
+String userIdParamForPaging = request.getParameter("user_id");
+String userIdQuery = "";
+String listPageUrl = "";
 
-				<!-- 1ページ目は戻るボタン無効化 -->
-				<?php
-					$isFirstPage = ($page === 1);
-					$nextPage = $page - 1;
-				?>
+if (userIdParamForPaging != null && !userIdParamForPaging.isEmpty()) {
+    userIdQuery = "&user_id=" + userIdParamForPaging;
+}
+%>
+<% if (totalPages > 1) { %>
+<div class="pagination">
+    <%
+		if (!myPage){
+			listPageUrl = "/diary-app-java/myPage/index.jsp?page=";
+		} else {
+			listPageUrl = "/diary-app-java/diary/index.jsp?page=";
+		}
 
-				<?php if ($isFirstPage): ?>
-					<button class="page-button arrow gray"><</button>
-				<?php else: ?>
-					<a href="?page=<?= $nextPage ?>" class="page-button arrow"><</a>
-				<?php endif; ?>
 
-				<?php for ($i = 1; $i <= $totalPages; $i++): ?>
-					<?php if ($page === $i): ?>
-						<button class="page-button current"><?= $i ?></button>
-					<?php else: ?>
-						<a href="?page=<?= $i ?>"><button class="page-button"><?= $i ?></button></a>
-					<?php endif; ?>
-				<?php endfor; ?>
+    if (currentPage <= 1) {
+    %>
+        <span class="page-button arrow gray">&lt;</span>
+    <%
+    } else {
+    %>
+        <a href="<%= listPageUrl %><%= currentPage - 1 %>" class="page-button arrow">&lt;</a>
+    <%
+    }
 
-				<!-- 最終ページ目は進むボタン無効化 -->
-				<?php
-					$isLastPage = ($page === $totalPages);
-					$nextPage = $page + 1;
-				?>
+    for (int i = 1; i <= totalPages; i++) {
+        if (i == currentPage) {
+    %>
+        <span class="page-button current"><%= i %></span>
+    <%
+        } else {
+    %>
+        <a href="<%= listPageUrl %><%= i %>" class="page-button"><%= i %></a>
+    <%
+        }
+    }
 
-				<?php if ($isLastPage): ?>
-					<button class="page-button arrow gray">></button>
-				<?php else: ?>
-					<a href="?page=<?= $nextPage ?>" class="page-button arrow">></a>
-				<?php endif; ?>
-
-			</div>
-			<?php endif; ?>
+    if (currentPage >= totalPages) {
+    %>
+        <span class="page-button arrow gray">&gt;</span>
+    <%
+    } else {
+    %>
+        <a href="<%= listPageUrl %><%= currentPage + 1 %>" class="page-button arrow">&gt;</a>
+    <%
+    }
+    %>
+</div>
+<% } %>

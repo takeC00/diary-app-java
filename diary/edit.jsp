@@ -18,6 +18,8 @@ public String h(String str) {
 Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
+Boolean myPage = false;
+
 // 表示用変数
 int id = 0;
 String image = "";

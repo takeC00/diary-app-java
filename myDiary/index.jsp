@@ -18,6 +18,7 @@ PreparedStatement ps = null;
 PreparedStatement countPs = null;
 ResultSet rs = null;
 ResultSet countRs = null;
+Boolean myPage = false;
 
 try {
 		Integer userId = (Integer) session.getAttribute("user_id");

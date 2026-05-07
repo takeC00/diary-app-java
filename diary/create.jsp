@@ -2,6 +2,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.io.*" %>
 <%@ page import="java.nio.file.Paths" %>
+<% Boolean myPage = false; %>
 
 <!DOCTYPE html>
 <html lang="ja">

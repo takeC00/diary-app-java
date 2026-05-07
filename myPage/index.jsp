@@ -19,6 +19,7 @@ PreparedStatement ps = null;
 PreparedStatement countPs = null;
 ResultSet rs = null;
 ResultSet countRs = null;
+boolean myPage = true;
 
 try {
 		Integer userId = (Integer) session.getAttribute("user_id");
@@ -215,41 +216,7 @@ try {
 					</div>
 				<% } %>
 			</form>
-			<div class="pagination">
-					<%
-					if (currentPage <= 1) {
-					%>
-							<span class="page-button arrow gray"><</span>
-					<%
-					} else {
-					%>
-							<a href="?page=<%= currentPage - 1 %>" class="page-button arrow"><</a>
-					<%
-					}
-
-					for (int i = 1; i <= totalPages; i++) {
-							if (i == currentPage) {
-					%>
-							<span class="page-button current"><%= i %></span>
-					<%
-							} else {
-					%>
-							<a href="?page=<%= i %>" class="page-button"><%= i %></a>
-					<%
-							}
-					}
-
-					if (currentPage >= totalPages) {
-					%>
-							<span class="page-button arrow gray">></span>
-					<%
-					} else {
-					%>
-							<a href="?page=<%= currentPage + 1 %>" class="page-button arrow">></a>
-					<%
-					}
-					%>
-			</div>
+		<%@ include file="/includes/pagination.jsp" %>
 		</section>
 	</main>
 <%@ include file="/includes/footer.jsp" %>
