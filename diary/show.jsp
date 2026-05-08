@@ -17,6 +17,8 @@ Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
 Boolean myPage = false;
+PreparedStatement countPs = null;
+ResultSet countRs = null;
 
 // 表示用変数
 int id = 0;
@@ -84,8 +86,28 @@ try {
 
 		if (id == 0) {
 				session.setAttribute("error", "存在しない日記IDが指定されました");
-				response.sendRedirect("/diary-app-java/diary/index.jsp");
+				response.sendRedirect("/diary-app-java/404.jsp");
 				return;
+		}
+
+    // 指定された日記IDが他人の非公開だった場合のバリデーション
+		int count = 0;
+		String publicCheckSql = "SELECT COUNT(*) "
+						+ "FROM diaries d "
+						+ "WHERE d.id = ? "
+						+ "AND d.is_public = 0 "
+						+ "AND d.user_id != ?";
+    countPs = conn.prepareStatement(publicCheckSql);
+    countPs.setInt(1, id);
+		countPs.setInt(2, userId);
+    countRs = countPs.executeQuery();
+		if (countRs.next()) {
+			count = countRs.getInt(1);
+			if (count != 0){
+				session.setAttribute("error", "他人の非公開日記IDが指定されました");
+				response.sendRedirect("/diary-app-java/404.jsp");
+				return;
+			}
 		}
 		String success = (String) session.getAttribute("success");
 %>

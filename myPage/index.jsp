@@ -100,23 +100,48 @@ try {
 				introduction = userRs.getString("introduction");
 		}
 
-		// 日記情報
-		String diarySql = "SELECT "
-							+ "d.id AS diary_id, "
-							+ "d.image AS image, "
-							+ "d.title AS title, "
-							+ "d.diary_date AS diary_date "
-							+ "FROM diaries d "
-							+ "JOIN users u ON u.id = d.user_id "
-							+ "WHERE d.user_id = ? "
-							+ "ORDER BY diary_date DESC "
-							+ "LIMIT ? OFFSET ?";
+		String diarySql = "";
+		PreparedStatement diaryPs = null;
+		ResultSet diaryRs = null;
 
-    PreparedStatement diaryPs = conn.prepareStatement(diarySql);
-    diaryPs.setInt(1, userId);
-		diaryPs.setInt(2, perPage);
-    diaryPs.setInt(3, offset);
-    ResultSet diaryRs = diaryPs.executeQuery();
+		if (otherUser){
+			// 日記情報(他人のマイページ：非公開は非表示)
+			diarySql = "SELECT "
+								+ "d.id AS diary_id, "
+								+ "d.image AS image, "
+								+ "d.title AS title, "
+								+ "d.diary_date AS diary_date "
+								+ "FROM diaries d "
+								+ "JOIN users u ON u.id = d.user_id "
+								+ "WHERE d.user_id = ? "
+								+ "AND d.is_public = 1 "
+								+ "ORDER BY diary_date DESC "
+								+ "LIMIT ? OFFSET ?";
+
+			diaryPs = conn.prepareStatement(diarySql);
+			diaryPs.setInt(1, userId);
+			diaryPs.setInt(2, perPage);
+			diaryPs.setInt(3, offset);
+			diaryRs = diaryPs.executeQuery();
+		}else{
+			// 日記情報(自分のマイページ：非公開も表示)
+			diarySql = "SELECT "
+								+ "d.id AS diary_id, "
+								+ "d.image AS image, "
+								+ "d.title AS title, "
+								+ "d.diary_date AS diary_date "
+								+ "FROM diaries d "
+								+ "JOIN users u ON u.id = d.user_id "
+								+ "WHERE d.user_id = ? "
+								+ "ORDER BY diary_date DESC "
+								+ "LIMIT ? OFFSET ?";
+
+			diaryPs = conn.prepareStatement(diarySql);
+			diaryPs.setInt(1, userId);
+			diaryPs.setInt(2, perPage);
+			diaryPs.setInt(3, offset);
+			diaryRs = diaryPs.executeQuery();
+		}
 
 		String success = (String) session.getAttribute("success");
 		String error	 = (String) session.getAttribute("error");

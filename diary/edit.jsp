@@ -95,7 +95,7 @@ try {
 
 		if (id == 0) {
 				session.setAttribute("error", "存在しない日記IDが指定されました");
-				response.sendRedirect("/diary-app-java/diary/index.jsp");
+				response.sendRedirect("/diary-app-java/404.jsp");
 				return;
 		}
 		if (userId != ownerId){
