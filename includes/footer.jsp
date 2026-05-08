@@ -9,15 +9,15 @@
 		</div>
 		<!-- ナビ -->
 		<nav class="">
-			<ul class="flex">
+			<ul class="flex right">
 				<li class="">
-					<a href="/diary/create">新規作成</a>
+					<a href="/diary-app-java/diary/create.jsp">新規作成</a>
 				</li>
 				<li class="">
-					<a href="/myDiaries">自分日記一覧</a>
+					<a href="/diary-app-java/myDiary/">自分日記一覧</a>
 				</li>
 				<li class="">
-					<a href="/myPage/1">
+					<a href="/diary-app-java/myPage/">
 						マイページ
 					</a>
 				</li>

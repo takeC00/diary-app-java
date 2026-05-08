@@ -10,7 +10,7 @@ if (userIdParamForPaging != null && !userIdParamForPaging.isEmpty()) {
 <% if (totalPages > 1) { %>
 <div class="pagination">
     <%
-		if (!myPage){
+		if (myPage){
 			listPageUrl = "/diary-app-java/myPage/index.jsp?page=";
 		} else {
 			listPageUrl = "/diary-app-java/diary/index.jsp?page=";
@@ -34,7 +34,7 @@ if (userIdParamForPaging != null && !userIdParamForPaging.isEmpty()) {
     <%
         } else {
     %>
-        <a href="<%= listPageUrl %><%= i %>" class="page-button"><%= i %></a>
+        <a href="<%= listPageUrl %><%= i %><%= userIdQuery %>" class="page-button"><%= i %></a>
     <%
         }
     }
@@ -45,7 +45,7 @@ if (userIdParamForPaging != null && !userIdParamForPaging.isEmpty()) {
     <%
     } else {
     %>
-        <a href="<%= listPageUrl %><%= currentPage + 1 %>" class="page-button arrow">&gt;</a>
+        <a href="<%= listPageUrl %><%= currentPage + 1 %><%= userIdQuery %>" class="page-button arrow">&gt;</a>
     <%
     }
     %>
