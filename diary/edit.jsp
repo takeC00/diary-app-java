@@ -2,6 +2,8 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.io.*" %>
 <%@ page import="java.nio.file.Paths" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%!
 public String h(String str) {
@@ -13,6 +15,8 @@ public String h(String str) {
               .replace("'", "&#39;");
 }
 %>
+
+<% List<String> errors = (List<String>) session.getAttribute("errors"); %>
 
 <%
 Connection conn = null;
@@ -113,7 +117,19 @@ try {
 <%@ include file="/includes/headder.jsp" %>
 	<main>
 		<section>
-						<div class="button-section">
+			<%
+				if (errors != null) {
+			%>
+			<ul>
+				<% for (String e : errors) { %>
+					<li style="color:red;"><%= e %></li>
+				<% } %>
+			</ul>
+			<%
+					session.removeAttribute("errors");
+			}
+			%>
+			<div class="button-section">
 				<a href="<%= backUrl %>"><button class="back">戻る</button></a>
 			</div>
 			<div class="detail-section">

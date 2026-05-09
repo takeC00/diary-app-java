@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import java.util.List;
+import java.util.ArrayList;
+
 @WebServlet("/diary/update")
 @MultipartConfig
 public class DiaryUpdateServlet extends HttpServlet {
@@ -87,6 +90,22 @@ public class DiaryUpdateServlet extends HttpServlet {
             imagePath = "/diary-app-java/images/diaries/" + fileName;
         }
 
+				// バリデーション
+				List<String> errors = new ArrayList<>();
+
+				if (title == null || title.trim().isEmpty()) {
+						errors.add("タイトルは必須です");
+				}
+
+				if (diaryDate == null || diaryDate.trim().isEmpty()) {
+						errors.add("日付は必須です");
+				}
+
+				if (!errors.isEmpty()) {
+					session.setAttribute("errors", errors);
+					response.sendRedirect("/diary-app-java/diary/edit.jsp?diary_id=" + id + "&page=" + pageParam);
+					return;
+				}
         Connection conn = null;
         PreparedStatement ps = null;
 
