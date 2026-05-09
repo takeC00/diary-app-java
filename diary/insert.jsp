@@ -11,7 +11,7 @@ request.setCharacterEncoding("UTF-8");
 
 Connection conn = null;
 PreparedStatement ps = null;
-
+boolean imageCheck = false;
 Integer userId = (Integer) session.getAttribute("user_id");
 
 if (userId == null) {
@@ -38,43 +38,65 @@ try {
 		List<FileItem> items = upload.parseRequest(request);
 
 		for (FileItem item : items) {
+			if (item.isFormField()) {
+					// テキスト
+					String name = item.getFieldName();
+					String value = item.getString("UTF-8");
 
-				if (item.isFormField()) {
-						// テキスト
-						String name = item.getFieldName();
-						String value = item.getString("UTF-8");
+					if ("title".equals(name)) title = value;
+					if ("diary_date".equals(name)) diaryDate = value;
+					if ("body".equals(name)) body = value;
+					if ("is_public".equals(name)) isPublic = value;
 
-						if ("title".equals(name)) title = value;
-						if ("diary_date".equals(name)) diaryDate = value;
-						if ("body".equals(name)) body = value;
-						if ("is_public".equals(name)) isPublic = value;
+			} else {
+				// ファイル
+				if (item.getSize() > 0) {
+					String originalFileName = new File(item.getName()).getName();
 
-				} else {
-						// ファイル
-						if (item.getSize() > 0) {
-							String originalFileName = new File(item.getName()).getName();
+					String ext = "";
+					int dotIndex = originalFileName.lastIndexOf(".");
+					if (dotIndex != -1) {
+							ext = originalFileName.substring(dotIndex);
+					}
 
-							String ext = "";
-							int dotIndex = originalFileName.lastIndexOf(".");
-							if (dotIndex != -1) {
-									ext = originalFileName.substring(dotIndex);
-							}
+					String fileName = "diary_" + new java.util.Date().getTime() + ext;
 
-							String fileName = "diary_" + new java.util.Date().getTime() + ext;
+					String uploadDirPath = application.getRealPath("/images/diaries");
+					File uploadDir = new File(uploadDirPath);
+					if (!uploadDir.exists()) {
+							uploadDir.mkdirs();
+					}
 
-							String uploadDirPath = application.getRealPath("/images/diaries");
-							File uploadDir = new File(uploadDirPath);
-							if (!uploadDir.exists()) {
-									uploadDir.mkdirs();
-							}
+					File saveFile = new File(uploadDir, fileName);
+					item.write(saveFile);
 
-							File saveFile = new File(uploadDir, fileName);
-							item.write(saveFile);
-
-							imagePath = "/diary-app-java/images/diaries/" + fileName;
-						}
+					imagePath = "/diary-app-java/images/diaries/" + fileName;
+					imageCheck = true;
 				}
+			}
 		}
+
+		// バリデーション
+		List<String> errors = new ArrayList<>();
+
+		if (title == null || title.trim().isEmpty()) {
+				errors.add("タイトルは必須です");
+		}
+
+		if (diaryDate == null || diaryDate.trim().isEmpty()) {
+				errors.add("日付は必須です");
+		}
+
+		if (!imageCheck){
+			errors.add("画像は必須です");
+		}
+
+		if (!errors.isEmpty()) {
+			session.setAttribute("errors", errors);
+			response.sendRedirect("/diary-app-java/diary/create.jsp");
+			return;
+		}
+
 
     conn = DriverManager.getConnection(url, user, password);
 
