@@ -33,7 +33,7 @@ try {
     conn = DriverManager.getConnection(url, user, password);
 
     // ★自分の投稿だけ削除できるようにする（重要）
-    String sql = "DELETE FROM diaries WHERE id = ? AND user_id = ?";
+    String sql = "UPDATE diaries set deleted_at = now()  WHERE id = ? AND user_id = ?";
     ps = conn.prepareStatement(sql);
     ps.setInt(1, id);
     ps.setInt(2, loginUserId);

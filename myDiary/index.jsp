@@ -48,7 +48,7 @@ try {
     int perPage = 12;
     int offset = (currentPage - 1) * perPage;
 
-    String countSql = "SELECT COUNT(*) FROM diaries d JOIN users u ON u.id = d.user_id WHERE u.id = ? ";
+    String countSql = "SELECT COUNT(*) FROM diaries d JOIN users u ON u.id = d.user_id WHERE u.id = ? AND d.deleted_at is null ";
 
     countPs = conn.prepareStatement(countSql);
 		countPs.setInt(1, userId);
@@ -73,6 +73,7 @@ try {
                + "FROM diaries d "
                + "JOIN users u ON u.id = d.user_id "
                + "WHERE u.id = ? "
+							 + "AND d.deleted_at is null "
                + "ORDER BY d.diary_date DESC "
                + "LIMIT ? OFFSET ?";
 

@@ -62,7 +62,8 @@ try {
     String sql = "SELECT d.id, d.user_id, d.image, d.title, d.diary_date, d.body, u.name AS user_name "
                + "FROM diaries d "
                + "JOIN users u ON u.id = d.user_id "
-               + "WHERE d.id = ?";
+               + "WHERE d.id = ? "
+							 + "AND d.deleted_at is null";
 
     ps = conn.prepareStatement(sql);
     ps.setInt(1, diary_id);
@@ -96,6 +97,7 @@ try {
 						+ "FROM diaries d "
 						+ "WHERE d.id = ? "
 						+ "AND d.is_public = 0 "
+						+ "AND d.deleted_at is null "
 						+ "AND d.user_id != ?";
     countPs = conn.prepareStatement(publicCheckSql);
     countPs.setInt(1, id);

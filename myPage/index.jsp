@@ -115,6 +115,7 @@ try {
 								+ "JOIN users u ON u.id = d.user_id "
 								+ "WHERE d.user_id = ? "
 								+ "AND d.is_public = 1 "
+								+ "AND d.deleted_at is null "
 								+ "ORDER BY diary_date DESC "
 								+ "LIMIT ? OFFSET ?";
 
@@ -124,7 +125,7 @@ try {
 			diaryPs.setInt(3, offset);
 			diaryRs = diaryPs.executeQuery();
 		}else{
-			// 日記情報(自分のマイページ：非公開も表示)
+			// 日記情報(自分のマイページ：非公開も表示・削除済みは表示されない)
 			diarySql = "SELECT "
 								+ "d.id AS diary_id, "
 								+ "d.image AS image, "
@@ -133,6 +134,7 @@ try {
 								+ "FROM diaries d "
 								+ "JOIN users u ON u.id = d.user_id "
 								+ "WHERE d.user_id = ? "
+								+ "AND d.deleted_at is null "
 								+ "ORDER BY diary_date DESC "
 								+ "LIMIT ? OFFSET ?";
 
