@@ -3,7 +3,7 @@
 
 
 <%
-
+	request.setCharacterEncoding("UTF-8");
 	Connection conn = null;
 	PreparedStatement ps = null;
 	String userIcon = "";
