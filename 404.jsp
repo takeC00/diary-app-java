@@ -16,7 +16,7 @@
 				}
 				session.removeAttribute("error");
 			%>
-			<img class="err-img" src = "/images/defaults/404.jpeg">
+			<img class="err-img" src="${pageContext.request.contextPath}/images/defaults/404.jpeg">
 		</section>
 	</main>
 </body>
@@ -26,7 +26,7 @@
 		<!-- ロゴ -->
 		<div class="">
 			<a href="/" class="flex">
-				<img src="/images/defaults/default.png" class="logo-mid">
+				<img src="${pageContext.request.contextPath}/images/defaults/default.png" class="logo-mid">
 			</a>
 		</div>
 

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="com.diary.db.DbConfig" %>
 
 <%!
 public String h(String str) {
@@ -29,13 +30,7 @@ try {
 			response.sendRedirect("/diary-app-java/");
 			return;
 		}
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
     String pageParam = request.getParameter("page");
 		String fromPage = request.getParameter("from");
@@ -116,7 +111,7 @@ try {
                 while (rs.next()) {
                     String image = rs.getString("image");
                     if (image == null || image.isEmpty()) {
-                        image = "/images/defaults/default.png";
+                        image = "/diary-app-java/images/defaults/default.png";
                     }
                 %>
                 <article class="diary-card">

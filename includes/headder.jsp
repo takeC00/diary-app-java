@@ -6,13 +6,16 @@
 		<!-- ロゴ -->
 		<div class="flex">
 			<a href="/diary-app-java/diary/" class="flex">
-				<img src="/images/defaults/default.png" class="logo">
+				<img src="${pageContext.request.contextPath}/images/defaults/default.png" class="logo">
 				<span class="">Photo Diary</span>
 			</a>
 		</div>
 		<!-- ナビ -->
 		<nav class="right">
 			<ul class="flex right">
+				<li class="">
+					<a href="/diary-app-java/diary/test.jsp">テストページ</a>
+				</li>
 				<li class="">
 					<a href="/diary-app-java/diary/create.jsp">新規作成</a>
 				</li>

@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="org.mindrot.jbcrypt.BCrypt" %>
+<%@ page import="com.diary.db.DbConfig" %>
 
 <%
 Connection conn = null;
@@ -14,13 +15,7 @@ ResultSet countRs = null;
 request.setCharacterEncoding("UTF-8");
 
 try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
 		String name =   "";
 		String email =  "";
@@ -62,7 +57,7 @@ try {
     ps = conn.prepareStatement(sql);
     ps.setString(1, name);
     ps.setString(2, email);
-		ps.setString(3, "/images/defaults/icon_1.jpeg");
+		ps.setString(3, "/diary-app-java/images/defaults/icon_1.jpeg");
 		ps.setString(4, hashedPassword);
 		int result = ps.executeUpdate();
 		if (result == 1) {

@@ -6,6 +6,7 @@
 <%@ page import="org.apache.commons.fileupload.*" %>
 <%@ page import="org.apache.commons.fileupload.disk.*" %>
 <%@ page import="org.apache.commons.fileupload.servlet.*" %>
+<%@ page import="com.diary.db.DbConfig" %>
 <%
 request.setCharacterEncoding("UTF-8");
 
@@ -21,12 +22,6 @@ if (userId == null) {
 }
 
 try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
 		// パラメータ用変数の初期化
 		String title = "";
 		String diaryDate = "";
@@ -98,7 +93,7 @@ try {
 		}
 
 
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
 		String sql = "INSERT INTO diaries (`user_id`, `title`, `diary_date`, `is_public`, `body`, `image`, `created_at`,`updated_at`)"
 						+ " VALUES (?, ?, ?, ?, ?, ?, now(), now())";

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="com.diary.db.DbConfig" %>
 
 <%!
 public String h(String str) {
@@ -50,14 +51,8 @@ if ("myDiary".equals(fromPage)) {
 
 
 try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
     Integer diary_id = Integer.parseInt(request.getParameter("diary_id"));
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
     String sql = "SELECT d.id, d.user_id, d.image, d.title, d.diary_date, d.body, u.name AS user_name "
                + "FROM diaries d "
@@ -71,7 +66,7 @@ try {
 		if (rs.next()) {
 			image = rs.getString("image");
 			if (image == null || image.isEmpty()) {
-					image = "/images/defaults/default.png";
+					image = "/diary-app-java/images/defaults/default.png";
 			}
 			id = rs.getInt("id");
 			title = rs.getString("title");

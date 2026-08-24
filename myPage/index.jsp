@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="com.diary.db.DbConfig" %>
 
 
 <%!
@@ -42,13 +43,7 @@ try {
 		}
 
 
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
     String pageParam = request.getParameter("page");
     int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
@@ -89,13 +84,16 @@ try {
 		ResultSet userRs = userPs.executeQuery();
 
 		String userName = "";
-		String userIcon = "/images/defaults/icon_1.jpeg";
+		String userIcon = "/diary-app-java/images/defaults/icon_1.jpeg";
 		String introduction = "";
 
 		if (userRs.next()) {
 				userName = userRs.getString("name");
 				if (userRs.getString("icon") != null && !userRs.getString("icon").isEmpty()) {
 						userIcon = userRs.getString("icon");
+				}
+				if (userIcon.startsWith("/images/")) {
+						userIcon = "/diary-app-java" + userIcon;
 				}
 				introduction = userRs.getString("introduction");
 		}
@@ -188,30 +186,30 @@ try {
 							<p class="mini-title">アイコン：</p>
 							<div class="icon-list">
 								<label>
-									<input type="radio" name="icon" value="/images/defaults/icon_1.jpeg">
-									<img src="/images/defaults/icon_1.jpeg">
+									<input type="radio" name="icon" value="/diary-app-java/images/defaults/icon_1.jpeg">
+									<img src="/diary-app-java/images/defaults/icon_1.jpeg">
 								</label>
 
 								<label>
-									<input type="radio" name="icon" value="/images/defaults/icon_2.jpeg">
-									<img src="/images/defaults/icon_2.jpeg">
+									<input type="radio" name="icon" value="/diary-app-java/images/defaults/icon_2.jpeg">
+									<img src="/diary-app-java/images/defaults/icon_2.jpeg">
 								</label>
 								<label>
-									<input type="radio" name="icon" value="/images/defaults/icon_3.jpeg">
-									<img src="/images/defaults/icon_3.jpeg">
+									<input type="radio" name="icon" value="/diary-app-java/images/defaults/icon_3.jpeg">
+									<img src="/diary-app-java/images/defaults/icon_3.jpeg">
 								</label>
 
 								<label>
-									<input type="radio" name="icon" value="/images/defaults/icon_4.jpeg">
-									<img src="/images/defaults/icon_4.jpeg">
+									<input type="radio" name="icon" value="/diary-app-java/images/defaults/icon_4.jpeg">
+									<img src="/diary-app-java/images/defaults/icon_4.jpeg">
 								</label>
 								<label>
-									<input type="radio" name="icon" value="/images/defaults/icon_5.jpeg">
-									<img src="/images/defaults/icon_5.jpeg">
+									<input type="radio" name="icon" value="/diary-app-java/images/defaults/icon_5.jpeg">
+									<img src="/diary-app-java/images/defaults/icon_5.jpeg">
 								</label>
 								<label>
-									<input type="radio" name="icon" value="/images/defaults/icon_6.jpeg">
-									<img src="/images/defaults/icon_6.jpeg">
+									<input type="radio" name="icon" value="/diary-app-java/images/defaults/icon_6.jpeg">
+									<img src="/diary-app-java/images/defaults/icon_6.jpeg">
 								</label>
 							</div>
 						<% } else { %>
@@ -225,7 +223,7 @@ try {
                   while (diaryRs.next()) {
                     String image = diaryRs.getString("image");
                     if (image == null || image.isEmpty()) {
-                        image = "/images/defaults/default.png";
+                        image = "/diary-app-java/images/defaults/default.png";
                     }
                 %>
 								<a href="/diary-app-java/diary/show.jsp?diary_id=<%= diaryRs.getInt("diary_id") %>&from=myPage&page=1" class="grid-item">

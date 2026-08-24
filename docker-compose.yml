@@ -1,0 +1,49 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: diary_app_php
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: diary_app_php
+      DB_USER: root
+      DB_PASSWORD: root
+      JAVA_OPTS: "-Djava.net.preferIPv4Stack=true"
+    volumes:
+      - ./includes:/usr/local/tomcat/webapps/diary-app-java/includes
+      - ./diary:/usr/local/tomcat/webapps/diary-app-java/diary
+      - ./auth:/usr/local/tomcat/webapps/diary-app-java/auth
+      - ./css:/usr/local/tomcat/webapps/diary-app-java/css
+      - ./myDiary:/usr/local/tomcat/webapps/diary-app-java/myDiary
+      - ./myPage:/usr/local/tomcat/webapps/diary-app-java/myPage
+      - ./index.jsp:/usr/local/tomcat/webapps/diary-app-java/index.jsp
+      - ./404.jsp:/usr/local/tomcat/webapps/diary-app-java/404.jsp
+      - ./dbtest.jsp:/usr/local/tomcat/webapps/diary-app-java/dbtest.jsp
+      - ./sw.js:/usr/local/tomcat/webapps/diary-app-java/sw.js
+      - ./push:/usr/local/tomcat/webapps/diary-app-java/push
+      - diary_images:/usr/local/tomcat/webapps/diary-app-java/images/diaries
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  diary_images:

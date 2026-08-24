@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="com.diary.db.DbConfig" %>
 
 <%
 request.setCharacterEncoding("UTF-8");
@@ -8,12 +9,6 @@ Connection conn = null;
 PreparedStatement ps = null;
 
 try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
     // パラメータ取得
     String idParam = request.getParameter("id");
     if (idParam == null) {
@@ -30,7 +25,7 @@ try {
         return;
     }
 
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
     // ★自分の投稿だけ削除できるようにする（重要）
     String sql = "UPDATE diaries set deleted_at = now()  WHERE id = ? AND user_id = ?";

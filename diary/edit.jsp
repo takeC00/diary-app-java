@@ -4,6 +4,7 @@
 <%@ page import="java.nio.file.Paths" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.diary.db.DbConfig" %>
 
 <%!
 public String h(String str) {
@@ -37,12 +38,6 @@ String is_public = "";
 String un_public = "";
 
 try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-    String user = "root";
-    String password = "root";
-
 		Integer userId = (Integer) session.getAttribute("user_id");
 		if (userId == null){
 			//ログインしてない場合
@@ -65,7 +60,7 @@ try {
 
 
     int diary_id = Integer.parseInt(request.getParameter("diary_id"));
-    conn = DriverManager.getConnection(url, user, password);
+    conn = DbConfig.getConnection();
 
     String sql = "SELECT d.id, d.user_id, d.image, d.title, d.diary_date, d.body, u.name AS user_name, d.is_public "
                + "FROM diaries d "
@@ -78,7 +73,7 @@ try {
 		if (rs.next()) {
 			image = rs.getString("image");
 			if (image == null || image.isEmpty()) {
-					image = "/images/defaults/default.png";
+					image = "/diary-app-java/images/defaults/default.png";
 			}
 			id = rs.getInt("id");
 			title = rs.getString("title");

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.diary.db.DbConfig;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -110,13 +112,7 @@ public class DiaryUpdateServlet extends HttpServlet {
         PreparedStatement ps = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            String url = "jdbc:mysql://localhost:8889/diary_app_php?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8";
-            String user = "root";
-            String password = "root";
-
-            conn = DriverManager.getConnection(url, user, password);
+            conn = DbConfig.getConnection();
 
             String sql;
 

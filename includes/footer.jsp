@@ -4,7 +4,7 @@
 		<!-- ロゴ -->
 		<div class="">
 			<a href="/diary-app-java/diary/" class="flex">
-				<img src="/images/defaults/default.png" class="logo-mid">
+				<img src="${pageContext.request.contextPath}/images/defaults/default.png" class="logo-mid">
 			</a>
 		</div>
 		<!-- ナビ -->
